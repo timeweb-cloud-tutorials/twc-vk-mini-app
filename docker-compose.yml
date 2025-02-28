@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    container_name: eisenhower_nginx
+    # Открываем порт 80 наружу для HTTP
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - eisenhower_net
+
+  backend:
+    build:
+      context: ./backend
+    container_name: eisenhower_backend
+    # Не открываем порт наружу, только внутри сети
+    # ports:
+    #   - "8000:8000"
+    networks:
+      - eisenhower_net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: eisenhower_frontend
+    # Не открываем порт наружу, только внутри сети
+    # ports:
+    #   - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - eisenhower_net
+
+networks:
+  eisenhower_net:
+    driver: bridge
