@@ -1,7 +1,19 @@
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# Install envsubst for environment variable substitution
+RUN apk add --no-cache bash gettext
 
-EXPOSE 80
+# Copy nginx config template
+COPY nginx.conf /etc/nginx/nginx.conf.template
 
-CMD ["nginx", "-g", "daemon off;"]
+# Create directory for certbot verification
+RUN mkdir -p /var/www/certbot
+
+# Expose both HTTP and HTTPS ports
+EXPOSE 80 443
+
+# Copy startup script
+COPY start.sh /
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
