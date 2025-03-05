@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
-# Install envsubst for environment variable substitution
-RUN apk add --no-cache bash gettext
+# Install envsubst for environment variable substitution and openssl for certificate generation
+RUN apk add --no-cache bash gettext openssl
 
 # Copy nginx config template
 COPY nginx.conf /etc/nginx/nginx.conf.template
