@@ -5,7 +5,6 @@ import uuid
 
 app = FastAPI()
 
-# Разрешаем запросы со всех доменов (включая фронтенд), т.к. Nginx не используем
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
