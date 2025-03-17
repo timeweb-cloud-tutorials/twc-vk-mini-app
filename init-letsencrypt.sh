@@ -101,7 +101,7 @@ if $PORT_IN_USE; then
   
   # Try to stop any running Nginx or other web servers
   echo "Stopping any running web servers..."
-  docker-compose down || true
+  docker compose down || true
   sleep 5
     
   # Check again
@@ -154,28 +154,28 @@ rm -rf ./data/certbot/conf/archive/$domain
 rm -rf ./data/certbot/conf/renewal/$domain.conf
 
 # Stop any running containers
-docker-compose down
+docker compose down
 
 # Set environment variable for domain
 export DOMAIN_NAME=$domain
 echo "Setting up certificates for domain: $domain"
 
-# Make sure docker-compose uses this environment variable
-docker-compose build nginx
+# Make sure docker compose uses this environment variable
+docker compose build nginx
 
 
 # Start nginx container with the domain name
-DOMAIN_NAME=$domain docker-compose up -d nginx
+DOMAIN_NAME=$domain docker compose up -d nginx
 
 # Wait for nginx to start
 echo "Waiting for nginx to start..."
 sleep 10
 
 # Check if nginx is running
-if ! docker-compose ps | grep -q "nginx.*Up"; then
+if ! docker compose ps | grep -q "nginx.*Up"; then
   echo "Warning: Nginx container is not running."
   echo "Checking Nginx logs:"
-  docker-compose logs nginx
+  docker compose logs nginx
   
   # Try to fix common issues
   echo "Attempting to fix Nginx configuration..."
@@ -186,12 +186,12 @@ if ! docker-compose ps | grep -q "nginx.*Up"; then
   
   # Rebuild and restart Nginx
   echo "Rebuilding and restarting Nginx..."
-  docker-compose build nginx
-  docker-compose up -d nginx
+  docker compose build nginx
+  docker compose up -d nginx
   sleep 5
   
   # Check again if Nginx is running
-  if ! docker-compose ps | grep -q "nginx.*Up"; then
+  if ! docker compose ps | grep -q "nginx.*Up"; then
     echo "Warning: Nginx container still not running after fix attempt."
     echo "Proceeding with certificate request anyway..."
     
@@ -225,7 +225,7 @@ echo "Running certbot command..."
 
 # Make sure port 80 is free
 echo "Making sure port 80 is free..."
-docker-compose down || true
+docker compose down || true
 sleep 5
 
 # Check for running Docker containers that might be using port 80
@@ -286,7 +286,7 @@ if [ $CERTBOT_EXIT_CODE -ne 0 ]; then
   
   # Make sure port 80 is free
   echo "Making sure port 80 is free before second attempt..."
-  docker-compose down || true
+  docker compose down || true
   sleep 5
   
   echo "Trying again with additional debug flags..."
@@ -324,7 +324,7 @@ fi
 
 # Restart nginx after certificate request
 echo "Restarting nginx..."
-docker-compose up -d nginx
+docker compose up -d nginx
 sleep 5
 
 # Sleep to allow certbot to finish
@@ -390,7 +390,7 @@ echo "Certificate obtained successfully!"
 
 # Restart nginx to use the new certificates
 echo "Restarting Nginx to apply SSL certificates..."
-docker-compose restart nginx || {
+docker compose restart nginx || {
   echo "Warning: Failed to restart Nginx. Will try to start all services."
 }
 
@@ -399,16 +399,16 @@ echo "Waiting for Nginx to restart..."
 sleep 5
 
 # Check if Nginx is running
-if ! docker-compose ps 2>/dev/null | grep -q "nginx.*Up"; then
+if ! docker compose ps 2>/dev/null | grep -q "nginx.*Up"; then
   echo "Warning: Nginx container is not running after restart."
   echo "Trying to start all services..."
 fi
 
 # Start all services
 echo "Starting all services..."
-docker-compose up -d || {
+docker compose up -d || {
   echo "Warning: Failed to start all services. Please check Docker logs."
-  echo "You may need to manually start the services with: docker-compose up -d"
+  echo "You may need to manually start the services with: docker compose up -d"
 }
 
 # Print certificate information
@@ -474,7 +474,7 @@ fi
 echo "  - STAGING=$staging"
 echo ""
 echo "For future runs, you can simply use:"
-echo "  docker-compose up -d"
+echo "  docker compose up -d"
 echo "The saved settings will be used automatically"
 echo ""
 echo "To change settings, either:"
