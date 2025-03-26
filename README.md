@@ -1,5 +1,5 @@
 - 🔗 **Оригинальный репозиторий**: [twc-vk-mini-app](https://github.com/extpankov/twc-vk-mini-app)
-- ✍️ **Автор**: [Roman Pankov]([https://github.com/vadim-belous](https://github.com/extpankov)) 
+- ✍️ **Автор**: [Roman Pankov](https://github.com/extpankov) 
 - 📖 **Репозиторий используется в статье**: [Как создать мини-приложение VK Mini Apps](https://timeweb.cloud/tutorials/react/kak-sozdat-mini-prilozhenie-vk-mini-apps)
 
 # Матрица Эйзенхауэра
